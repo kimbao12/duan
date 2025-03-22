@@ -1,0 +1,65 @@
+CREATE DATABASE KhamSucKhoeTrucTuyen;
+GO
+
+USE KhamSucKhoeTrucTuyen;
+GO
+CREATE TABLE BenhNhan (
+    MaBenhNhan INT IDENTITY(1,1) PRIMARY KEY,
+    HoTen NVARCHAR(100) NOT NULL,
+    Tuoi INT,
+    GioiTinh NVARCHAR(10),
+    SoDienThoai NVARCHAR(20),
+    NgayTao DATETIME DEFAULT GETDATE()
+);
+go
+
+CREATE TABLE BacSi (
+    MaBacSi INT IDENTITY(1,1) PRIMARY KEY,
+    HoTen NVARCHAR(100) NOT NULL,
+    Khoa NVARCHAR(100), -- Chuyên khoa
+    SoDienThoai NVARCHAR(20),
+    Email NVARCHAR(100) UNIQUE NOT NULL,
+    TrangThai NVARCHAR(20) DEFAULT 'DangHoatDong', -- Có thể là 'DangHoatDong', 'TamNgung'
+    NgayTao DATETIME DEFAULT GETDATE()
+);
+go
+
+CREATE TABLE LichHen (
+    MaLichHen INT IDENTITY(1,1) PRIMARY KEY,
+    MaBenhNhan INT FOREIGN KEY REFERENCES BenhNhan(MaBenhNhan),
+    MaBacSi INT FOREIGN KEY REFERENCES BacSi(MaBacSi),
+    ThoiGianHen DATETIME NOT NULL,
+    TrangThai NVARCHAR(20) DEFAULT 'ChoXacNhan', -- ChoXacNhan / DaXacNhan / DaHuy
+    TrieuChung NVARCHAR(MAX),
+    NgayTao DATETIME DEFAULT GETDATE()
+);
+go
+
+CREATE TABLE DonThuoc (
+    MaDonThuoc INT IDENTITY(1,1) PRIMARY KEY,
+    MaBenhNhan INT FOREIGN KEY REFERENCES BenhNhan(MaBenhNhan),
+    MaBacSi INT FOREIGN KEY REFERENCES BacSi(MaBacSi),
+    Thuoc NVARCHAR(MAX),
+    HuongDan NVARCHAR(MAX),
+    NgayTao DATETIME DEFAULT GETDATE()
+);
+go
+
+CREATE TABLE HoSoBenhNhan (
+    MaHoSo INT IDENTITY(1,1) PRIMARY KEY,
+    MaBenhNhan INT FOREIGN KEY REFERENCES BenhNhan(MaBenhNhan),
+    ChanDoan NVARCHAR(MAX),
+    HuongDieuTri NVARCHAR(MAX),
+    NgayTao DATETIME DEFAULT GETDATE()
+);
+go
+
+CREATE TABLE ChanDoanAI (
+    MaChanDoan INT IDENTITY(1,1) PRIMARY KEY,
+    MaBenhNhan INT FOREIGN KEY REFERENCES BenhNhan(MaBenhNhan),
+    TrieuChung NVARCHAR(MAX),
+    DuDoanBenh NVARCHAR(255),
+    DoTinCay FLOAT,
+    NgayTao DATETIME DEFAULT GETDATE()
+);
+go
